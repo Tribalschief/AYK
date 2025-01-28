@@ -5,13 +5,14 @@ import { useState, useEffect, useRef } from "react"
 import { gsap } from "gsap"
 import ProjectCard from "./PC/PCard"
 import styles from "@/app/(frontend)/Portfolio/main.module.css"
-
+import por2 from '../assets/por2.jpg'
+import por4 from '../assets/por3.jpg'
 const projects = [
   {
     id: "1",
     title: "AI-Powered Analytics Dashboard",
     category: "Web Development",
-    image: "/assets/por2.jpg",
+    image: `../assets/por2.jpg`,
     description: "An interactive dashboard leveraging AI for real-time business insights.",
     link: "#",
     tags: ["React", "AI", "Data Visualization"],
@@ -20,7 +21,7 @@ const projects = [
     id: "2",
     title: "E-commerce Mobile App",
     category: "Mobile Development",
-    image: "/assets/por4.png",
+    image: `../assets/por2.jpg`,
     description: "A feature-rich mobile app for a seamless shopping experience.",
     link: "#",
     tags: ["React Native", "Redux", "Payment Integration"],
@@ -29,7 +30,7 @@ const projects = [
     id: "3",
     title: "Smart Home IoT Platform",
     category: "IoT",
-    image: "/assets/por2.jpg",
+    image: `../assets/por2.jpg`,
     description: "An integrated platform for managing smart home devices.",
     link: "#",
     tags: ["IoT", "Node.js", "MQTT"],
@@ -38,7 +39,7 @@ const projects = [
     id: "4",
     title: "Blockchain-based Supply Chain",
     category: "Blockchain",
-    image: "/assets/por4.jpg",
+    image: `../assets/por2.jpg`,
     description: "A transparent and secure supply chain management system.",
     link: "#",
     tags: ["Blockchain", "Solidity", "Web3.js"],

@@ -1,27 +1,14 @@
 "use client"
 
-import type React from "react"
 import { useRef, useEffect } from "react"
 import Image from "next/image"
 import { gsap } from "gsap"
 import styles from "./cmain.module.css"
+import Link from "next/link"
 
-interface Project {
-  id: string
-  title: string
-  category: string
-  image: string
-  description: string
-  link: string
-  tags: string[]
-}
 
-interface ProjectCardProps {
-  project: Project
-}
-
-const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
-  const cardRef = useRef<HTMLDivElement>(null)
+const ProjectCard = ({ project }) => {
+  const cardRef = useRef(null)
 
   useEffect(() => {
     const card = cardRef.current
@@ -43,7 +30,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   return (
     <div ref={cardRef} className={styles.card}>
       <div className={styles.projectImage}>
-        <Image src={project.image || "/placeholder.svg"} alt={project.title} layout="fill" objectFit="cover" />
+        <img src={project.image.src || "/placeholder.svg"} alt={project.title} layout="fill" objectFit="cover" />
       </div>
       <div className={styles.projectContent}>
         <h3 className={styles.projectTitle}>{project.title}</h3>
@@ -57,9 +44,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         </div>
         <div className={styles.projectFooter}>
           <span className={styles.category}>{project.category}</span>
-          <a href={project.link} className={styles.viewProject}>
+          <Link href={project.link} className={styles.viewProject}>
             View Project
-          </a>
+          </Link>
         </div>
       </div>
     </div>
