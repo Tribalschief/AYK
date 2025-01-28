@@ -1,0 +1,76 @@
+.card {
+    background-color: #1a202c;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .card:hover {
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .projectImage {
+    position: relative;
+    height: 12rem;
+    transition: all 0.3s ease;
+  }
+  
+  .projectContent {
+    padding: 1rem 1.5rem;
+  }
+  
+  .projectTitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #63b3ed;
+  }
+  
+  .projectDescription {
+    font-size: 0.875rem;
+    color: #a0aec0;
+    margin-bottom: 1rem;
+  }
+  
+  .projectTags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .tag {
+    font-size: 0.75rem;
+    background-color: #2d3748;
+    color: #e2e8f0;
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+  }
+  
+  .projectFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .category {
+    font-size: 0.75rem;
+    background-color: #3182ce;
+    color: #ffffff;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+  }
+  
+  .viewProject {
+    font-size: 0.875rem;
+    color: #63b3ed;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .viewProject:hover {
+    color: #4299e1;
+  }
+  
+  

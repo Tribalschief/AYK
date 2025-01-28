@@ -1,0 +1,102 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    color: #fff;
+    font-family: "Lato", sans-serif;
+    overflow-x: hidden;
+    background: linear-gradient(to bottom left, #2d3748, #000000, #2e3a4e);
+    height: 100%;
+  }
+  
+  .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 3rem;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 1000;
+  }
+  
+  .navbar span {
+    position: absolute;
+    bottom: 0;
+    height: 2px;
+    width: 50px;
+    background: linear-gradient(90deg, transparent, #fff);
+    animation: animate 5s infinite linear;
+  }
+
+  @keyframes animate {
+    0% {
+      left: 0;
+      transform: translate(-100%);
+    }
+    100% {
+      left: 100%;
+      transform: translate(0%);
+    }
+  }
+  
+  li {
+    list-style: none;
+  }
+  
+  a {
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  .menu {
+    display: flex;
+    gap: 5rem;
+    text-transform: uppercase;
+    font-weight: 100;
+  }
+  
+  .btn {
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  @keyframes animate {
+    0% {
+      left: 0;
+      transform: translate(-100%);
+    }
+    100% {
+      left: 100%;
+      transform: translate(0%);
+    }
+  }
+  @media (max-width: 768px) {
+    .navbar {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .menu {
+      flex-direction: column;
+      width: 100%;
+      gap: 1rem;
+      padding-top: 1rem;
+    }
+  
+    .menu li {
+      width: 100%;
+      text-align: center;
+    }
+  
+    .btn {
+      width: 100%;
+      padding: 0.5rem;
+    }
+  }
