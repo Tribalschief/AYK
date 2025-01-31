@@ -12,18 +12,13 @@ import styled from 'styled-components';
       <div className="text">{props}</div>
     </button> */}
 
-    const Button = ({ label, mailto, className }) => {
+    const Button = ({ label, className }) => {
       return (
         <StyledWrapper>
           
           <button
             className={`button ${className}`}
-            onClick={(e) => {
-              if (mailto) {
-                window.location.href = mailto;
-              }
-              e.preventDefault();
-            }}
+            
           >
             <div className="dots_border" />
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="sparkle">
@@ -97,7 +92,12 @@ const StyledWrapper = styled.div`
 
     width: 100%;
     height: 100%;
-    background-color: var(--black-700);
+    background: linear-gradient(
+    135deg,
+    #000045 0%,    /* Dark Royal Blue */
+    #0e1717 50%,   /* Dark Slate Gray */
+    #000000 100%   /* Black */
+  );
 
     border-radius: var(--border_radius);
     box-shadow: inset 0 0.5px hsl(0, 0%, 100%), inset 0 -1px 2px 0 hsl(0, 0%, 0%),

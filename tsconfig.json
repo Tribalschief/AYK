@@ -37,7 +37,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-, "src/components/PC/PCard.jsx"  ],
+, "src/components/PC/PCard.jsx", "src/components/Intro.jsx"  ],
   "exclude": [
     "node_modules"
   ]

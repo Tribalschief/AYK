@@ -13,6 +13,9 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    Profile: Profile;
+    Service: Service;
+    projects: Project;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -21,6 +24,9 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    Profile: ProfileSelect<false> | ProfileSelect<true>;
+    Service: ServiceSelect<false> | ServiceSelect<true>;
+    projects: ProjectsSelect<false> | ProjectsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -80,7 +86,6 @@ export interface User {
  */
 export interface Media {
   id: number;
-  alt: string;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -92,6 +97,66 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Profile".
+ */
+export interface Profile {
+  id: number;
+  name: string;
+  description?:
+    | {
+        Description: string;
+        id?: string | null;
+      }[]
+    | null;
+  skills?:
+    | {
+        name: string;
+        id?: string | null;
+      }[]
+    | null;
+  image?: (number | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Service".
+ */
+export interface Service {
+  id: number;
+  name: string;
+  description: string;
+  skills: {
+    name: string;
+    level: number;
+    icon: number | Media;
+    id?: string | null;
+  }[];
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects".
+ */
+export interface Project {
+  id: number;
+  title: string;
+  category: 'web-development' | 'mobile-development' | 'iot' | 'blockchain';
+  image: number | Media;
+  description: string;
+  link?: string | null;
+  tags?:
+    | {
+        tag?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -107,6 +172,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'Profile';
+        value: number | Profile;
+      } | null)
+    | ({
+        relationTo: 'Service';
+        value: number | Service;
+      } | null)
+    | ({
+        relationTo: 'projects';
+        value: number | Project;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -170,7 +247,6 @@ export interface UsersSelect<T extends boolean = true> {
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
-  alt?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -182,6 +258,65 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Profile_select".
+ */
+export interface ProfileSelect<T extends boolean = true> {
+  name?: T;
+  description?:
+    | T
+    | {
+        Description?: T;
+        id?: T;
+      };
+  skills?:
+    | T
+    | {
+        name?: T;
+        id?: T;
+      };
+  image?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Service_select".
+ */
+export interface ServiceSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  skills?:
+    | T
+    | {
+        name?: T;
+        level?: T;
+        icon?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects_select".
+ */
+export interface ProjectsSelect<T extends boolean = true> {
+  title?: T;
+  category?: T;
+  image?: T;
+  description?: T;
+  link?: T;
+  tags?:
+    | T
+    | {
+        tag?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

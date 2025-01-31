@@ -1,16 +1,16 @@
 import type { CollectionConfig } from 'payload'
 
 export const Media: CollectionConfig = {
-  slug: 'media',
-  access: {
-    read: () => true,
+  slug: "media",
+  upload: {
+    staticDir: "media",
+    mimeTypes: ["image/png", "image/jpeg", "image/svg+xml"],
   },
   fields: [
     {
-      name: 'alt',
-      type: 'text',
-      required: true,
+      name: 'file',
+      type: 'upload',
+      relationTo: 'media',
     },
   ],
-  upload: true,
 }
