@@ -8,7 +8,7 @@ export const Media: CollectionConfig = {
   },
   fields: [
     {
-      name: 'file',
+      name: 'images',
       type: 'upload',
       relationTo: 'media',
     },

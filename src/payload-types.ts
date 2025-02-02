@@ -86,6 +86,7 @@ export interface User {
  */
 export interface Media {
   id: number;
+  images?: (number | null) | Media;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -104,8 +105,8 @@ export interface Media {
  */
 export interface Profile {
   id: number;
-  name: string;
-  description?:
+  Pname: string;
+  Pdescription?:
     | {
         Description: string;
         id?: string | null;
@@ -113,11 +114,11 @@ export interface Profile {
     | null;
   skills?:
     | {
-        name: string;
+        skillsName: string;
         id?: string | null;
       }[]
     | null;
-  image?: (number | null) | Media;
+  file?: (number | null) | Media;
   updatedAt: string;
   createdAt: string;
 }
@@ -127,12 +128,12 @@ export interface Profile {
  */
 export interface Service {
   id: number;
-  name: string;
-  description: string;
+  ServiceName: string;
+  ServiceDescription: string;
   skills: {
-    name: string;
-    level: number;
-    icon: number | Media;
+    skillsName: string;
+    skillsLevel: number;
+    file: number | Media;
     id?: string | null;
   }[];
   updatedAt: string;
@@ -144,12 +145,12 @@ export interface Service {
  */
 export interface Project {
   id: number;
-  title: string;
-  category: 'web-development' | 'mobile-development' | 'iot' | 'blockchain';
-  image: number | Media;
-  description: string;
-  link?: string | null;
-  tags?:
+  projectTitle: string;
+  projectsCategory: 'web-development' | 'ui Ux' | 'AI' | 'Cloud';
+  projectImage: number | Media;
+  projectDescription: string;
+  projectLink?: string | null;
+  projectTags?:
     | {
         tag?: string | null;
         id?: string | null;
@@ -247,6 +248,7 @@ export interface UsersSelect<T extends boolean = true> {
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
+  images?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -264,8 +266,8 @@ export interface MediaSelect<T extends boolean = true> {
  * via the `definition` "Profile_select".
  */
 export interface ProfileSelect<T extends boolean = true> {
-  name?: T;
-  description?:
+  Pname?: T;
+  Pdescription?:
     | T
     | {
         Description?: T;
@@ -274,10 +276,10 @@ export interface ProfileSelect<T extends boolean = true> {
   skills?:
     | T
     | {
-        name?: T;
+        skillsName?: T;
         id?: T;
       };
-  image?: T;
+  file?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -286,14 +288,14 @@ export interface ProfileSelect<T extends boolean = true> {
  * via the `definition` "Service_select".
  */
 export interface ServiceSelect<T extends boolean = true> {
-  name?: T;
-  description?: T;
+  ServiceName?: T;
+  ServiceDescription?: T;
   skills?:
     | T
     | {
-        name?: T;
-        level?: T;
-        icon?: T;
+        skillsName?: T;
+        skillsLevel?: T;
+        file?: T;
         id?: T;
       };
   updatedAt?: T;
@@ -304,12 +306,12 @@ export interface ServiceSelect<T extends boolean = true> {
  * via the `definition` "projects_select".
  */
 export interface ProjectsSelect<T extends boolean = true> {
-  title?: T;
-  category?: T;
-  image?: T;
-  description?: T;
-  link?: T;
-  tags?:
+  projectTitle?: T;
+  projectsCategory?: T;
+  projectImage?: T;
+  projectDescription?: T;
+  projectLink?: T;
+  projectTags?:
     | T
     | {
         tag?: T;

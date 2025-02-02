@@ -7,16 +7,16 @@ export const Project: CollectionConfig = {
     plural: "Projects",
   },
   admin: {
-    useAsTitle: 'projects_title',
+    useAsTitle: 'projectTitle',
   },
   fields: [
     {
-      name: "projects_title",
+      name: "projectTitle",
       type: "text",
       required: true,
     },
     {
-      name: "projects_category",
+      name: "projectsCategory",
       type: "select",
       required: true,
       options: [
@@ -27,23 +27,23 @@ export const Project: CollectionConfig = {
       ],
     },
     {
-      name: "project_image",
+      name: "projectImage",
       type: "upload",
       relationTo: "media",
       required: true,
     },
     {
-      name: "project_description",
+      name: "projectDescription",
       type: "textarea",
       required: true,
     },
     {
-      name: "project__link",
+      name: "projectLink",
       type: "text",
       required: false,
     },
     {
-      name: "project_tags",
+      name: "projectTags",
       type: "array",
       required: false,
       fields: [

@@ -2,14 +2,17 @@ import type { CollectionConfig } from 'payload'
 
 export const Profile: CollectionConfig = {
   slug: 'Profile',
+  admin:{
+    useAsTitle: 'Pname',
+  },
   fields: [
    {
-    name: 'name',
+    name: 'Pname',
     type: 'text',
     required: true,
   },
   {
-    name: "description",
+    name: "Pdescription",
     type:"array",
     fields: [
       {
@@ -24,14 +27,14 @@ export const Profile: CollectionConfig = {
     type:"array",
     fields: [
       {
-        name:"name",
+        name:"skillsName",
         type:"text",
         required:true,
       },
     ]
   },
   {
-    name:"image",
+    name:"PImage",
     relationTo: "media",
     type:"upload",
   }

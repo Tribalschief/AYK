@@ -38,7 +38,7 @@ export const Service: CollectionConfig = {
           max: 100,
         },
         {
-          name: "skillsIcon",
+          name: "file",
           type: "upload",
           relationTo: "media",
           required: true,
