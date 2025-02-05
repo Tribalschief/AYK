@@ -113,7 +113,10 @@ const ProjectShowcase = () => {
             {categories.map((category, index) => (
               <button
                 key={category}
-                ref={el => categoryButtonsRef.current[index] = el as HTMLButtonElement}
+                ref={el => {
+                  categoryButtonsRef.current[index] = el as HTMLButtonElement;
+                  return;
+                }}
                 onClick={() => handleCategoryClick(category)}
                 className={`${styles.categoryButton} ${
                   category === activeCategory ? styles.active : ""
@@ -142,7 +145,9 @@ const ProjectShowcase = () => {
             {filteredProjects.map((project, index) => (
               <div 
                 key={project.id}
-                ref={el => projectCardsRef.current[index] = el as HTMLDivElement}
+                ref={el => {projectCardsRef.current[index] = el as HTMLDivElement;
+                  return;}
+                }
               >
                 <ProjectCard project={project} />
               </div>
