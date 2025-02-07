@@ -21,7 +21,7 @@ export const projects = defineType({
           {title: 'Ui/Ux', value: 'Design'},
           {title: 'Mobile Development', value: 'Mobile Development'},
           {title: 'Data Science', value: 'Data Science'},
-
+          {title: "Cloud Computing", value: "Cloud Computing"}
           {title: 'IoT', value: 'IoT'},
           {title: 'Blockchain', value: 'Blockchain'}
         ],
