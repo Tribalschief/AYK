@@ -19,9 +19,9 @@ const Header = () => {
 
   // Replace these with your actual social media URLs
   const socialLinks = {
-    github: "https://github.com/yourusername",
-    linkedin: "https://linkedin.com/in/yourusername",
-    twitter: "https://twitter.com/yourusername",
+    github: "https://github.com/Tribalschief",
+    linkedin: "https://www.linkedin.com/in/ahmed-yar-khan/",
+    twitter: "https://x.com/Ahmedkhakwanii",
   }
 
   useEffect(() => {
@@ -111,30 +111,30 @@ const Header = () => {
               </button>
             </li>
             <li ref={socialIconsRef} className="flex space-x-4">
-              <a
+              <Link
                 href={socialLinks.github}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white hover:text-blue-400 transition-colors duration-300"
               >
                 <GitHub size={24} />
-              </a>
-              <a
+              </Link>
+              <Link
                 href={socialLinks.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white hover:text-blue-400 transition-colors duration-300"
               >
                 <Linkedin size={24} />
-              </a>
-              <a
+              </Link>
+              <Link
                 href={socialLinks.twitter}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white hover:text-blue-400 transition-colors duration-300"
               >
                 <Twitter size={24} />
-              </a>
+              </Link>
             </li>
           </ul>
         </nav>

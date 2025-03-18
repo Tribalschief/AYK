@@ -31,13 +31,10 @@ const ProjectShowcase = () => {
   // Fetch projects
   useEffect(() => {
     const fetchData = async () => {
-      try {
         const result = await getProject()
-        setProjects(result)
-      } catch (error) {
-        console.error('Error fetching data:', error)
-      }
+        setProjects(result)     
     }
+    console.log(projects)
     fetchData()
   }, [])
 

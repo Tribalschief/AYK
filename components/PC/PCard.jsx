@@ -31,7 +31,8 @@ const ProjectCard = ({ project }) => {
   return (
     <div ref={cardRef} className={styles.card}>
       <div className={styles.projectImage}>
-        <Image src={project.imageUrl} alt={project.title} layout="fill" objectFit="cover" />
+        <Image src={project.imageUrl} alt={project.title} fill={true}
+  style={{ objectFit: 'cover' }} />
         <div className={styles.overlay} />
       </div>
       <div className={styles.projectContent}>
