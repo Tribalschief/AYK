@@ -9,7 +9,8 @@ const nextConfig: NextConfig = {
         port: ""
       }
     ]
-  }
+  },
+     // Only needed for GitHub Pages or similar
 };
 
 export default nextConfig;

@@ -94,7 +94,7 @@ const Header = () => {
           <ul className="menu flex space-x-8 items-center">
             {["Home", "Services", "Portfolio"].map((item, index) => (
               <li key={item} className="menu-item" ref={(el) => (menuItemsRef.current[index] = el)}>
-                <Link href={item === "Home" ? "/" : `/${item.toLowerCase()}`}>{item}</Link>
+                <Link href={item === "Home" ? "/" : `/${item}`}>{item}</Link>
               </li>
             ))}
             <li ref={(el) => (menuItemsRef.current[3] = el)}>
