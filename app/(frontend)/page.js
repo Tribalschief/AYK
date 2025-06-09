@@ -8,7 +8,7 @@ export default function Home() {
   
 
   return (
-    <div className="App" ref={pageRef}>
+    <div className="App" >
       <VideoSection />
       <div>
         <UltimateHome />
