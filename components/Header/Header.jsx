@@ -99,7 +99,7 @@ const Header = () => {
             ))}
             <li ref={(el) => (menuItemsRef.current[3] = el)}>
               <button
-                className="btn border-d border-blue-600 hover:bg-blue-700 px-4 py-2 rounded-full transition-colors duration-300"
+                className="btn border-d  px-4 py-2 rounded-full transition-colors duration-300"
                 onClick={(e) => {
                   if (mailto) {
                     window.location.href = mailto
