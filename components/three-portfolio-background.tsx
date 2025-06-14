@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useRef, useEffect } from "react"
 import * as THREE from "three"
 
 interface ThreePortfolioBackgroundProps {
@@ -8,19 +8,22 @@ interface ThreePortfolioBackgroundProps {
   activeCategory?: string
 }
 
-const ThreePortfolioBackground = ({ className  , activeCategory}: ThreePortfolioBackgroundProps) => {
+const ThreePortfolioBackground = ({ className, activeCategory }: ThreePortfolioBackgroundProps) => {
   const mountRef = useRef<HTMLDivElement>(null)
-  const sceneRef = useRef<THREE.Scene>()
-  const rendererRef = useRef<THREE.WebGLRenderer>()
-  const cameraRef = useRef<THREE.PerspectiveCamera>()
-  const frameRef = useRef<number>()
-  console.log("activeCategory", activeCategory)
+  const sceneRef = useRef<THREE.Scene | null>(null)
+  const rendererRef = useRef<THREE.WebGLRenderer | null>(null)
+  const cameraRef = useRef<THREE.PerspectiveCamera | null>(null)
+  const frameRef = useRef<number | null>(null)
+ 
+  if(false){
+    console.log(mountRef.current, sceneRef.current, rendererRef.current, cameraRef.current, frameRef.current, activeCategory)
+  }
   useEffect(() => {
     if (!mountRef.current) return
 
     // Scene setup
     const scene = new THREE.Scene()
-    scene.fog = new THREE.Fog(0x0a0a0a, 10, 100)
+    scene.fog = new THREE.Fog(0x000000, 10, 100) // Black fog
     sceneRef.current = scene
 
     // Camera setup
@@ -47,14 +50,14 @@ const ThreePortfolioBackground = ({ className  , activeCategory}: ThreePortfolio
 
     mountRef.current.appendChild(renderer.domElement)
 
-    // Create floating project cards in 3D space
+    // Create floating project cards in 3D space - now in black and white
     const cardGroup = new THREE.Group()
     const cards: THREE.Mesh[] = []
 
     for (let i = 0; i < 12; i++) {
       const cardGeometry = new THREE.PlaneGeometry(2, 1.2, 1, 1)
       const cardMaterial = new THREE.MeshPhysicalMaterial({
-        color: 0x2d3748,
+        color: 0x1a1a1a, // Dark gray
         metalness: 0.1,
         roughness: 0.8,
         transmission: 0.1,
@@ -79,8 +82,7 @@ const ThreePortfolioBackground = ({ className  , activeCategory}: ThreePortfolio
 
     scene.add(cardGroup)
 
-    // Create code matrix effect
-    
+    // Create code matrix effect - now in black and white
     const matrixGeometry = new THREE.BufferGeometry()
     const matrixCount = 1000
     const matrixPositions = new Float32Array(matrixCount * 3)
@@ -91,11 +93,10 @@ const ThreePortfolioBackground = ({ className  , activeCategory}: ThreePortfolio
       matrixPositions[i * 3 + 1] = (Math.random() - 0.5) * 50
       matrixPositions[i * 3 + 2] = (Math.random() - 0.5) * 50
 
-      const color = new THREE.Color()
-      color.setHSL(0.3 + Math.random() * 0.3, 1, 0.5)
-      matrixColors[i * 3] = color.r
-      matrixColors[i * 3 + 1] = color.g
-      matrixColors[i * 3 + 2] = color.b
+      const brightness = 0.3 + Math.random() * 0.7 // Grayscale value between 0.3 and 1.0
+      matrixColors[i * 3] = brightness
+      matrixColors[i * 3 + 1] = brightness
+      matrixColors[i * 3 + 2] = brightness
     }
 
     matrixGeometry.setAttribute("position", new THREE.BufferAttribute(matrixPositions, 3))
@@ -112,7 +113,7 @@ const ThreePortfolioBackground = ({ className  , activeCategory}: ThreePortfolio
     const matrix = new THREE.Points(matrixGeometry, matrixMaterial)
     scene.add(matrix)
 
-    // Create geometric wireframes
+    // Create geometric wireframes - now in black and white
     const wireframeGroup = new THREE.Group()
     const geometries = [
       new THREE.IcosahedronGeometry(1, 1),
@@ -125,7 +126,7 @@ const ThreePortfolioBackground = ({ className  , activeCategory}: ThreePortfolio
       const line = new THREE.LineSegments(
         wireframe,
         new THREE.LineBasicMaterial({
-          color: [0x3b82f6, 0x8b5cf6, 0xec4899][index],
+          color: [0xffffff, 0xdddddd, 0xaaaaaa][index], // White to gray
           transparent: true,
           opacity: 0.3,
         }),
@@ -138,20 +139,20 @@ const ThreePortfolioBackground = ({ className  , activeCategory}: ThreePortfolio
 
     scene.add(wireframeGroup)
 
-    // Lighting
+    // Lighting - now in black and white
     const ambientLight = new THREE.AmbientLight(0x404040, 0.4)
     scene.add(ambientLight)
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8)
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8) // White light
     directionalLight.position.set(10, 10, 5)
     directionalLight.castShadow = true
     scene.add(directionalLight)
 
-    const pointLight1 = new THREE.PointLight(0x3b82f6, 1, 50)
+    const pointLight1 = new THREE.PointLight(0xffffff, 1, 50) // White light
     pointLight1.position.set(-10, 5, 10)
     scene.add(pointLight1)
 
-    const pointLight2 = new THREE.PointLight(0x8b5cf6, 1, 50)
+    const pointLight2 = new THREE.PointLight(0xdddddd, 1, 50) // Light gray light
     pointLight2.position.set(10, -5, -10)
     scene.add(pointLight2)
 
@@ -208,21 +209,25 @@ const ThreePortfolioBackground = ({ className  , activeCategory}: ThreePortfolio
       pointLight2.position.z = Math.sin(time * 0.7) * 15
 
       // Smooth camera movement
-      camera.position.lerp(targetCameraPosition, 0.05)
-      camera.lookAt(0, 0, 0)
+      if (camera) {
+        camera.position.lerp(targetCameraPosition, 0.05)
+        camera.lookAt(0, 0, 0)
+      }
 
-      renderer.render(scene, camera)
+      if (renderer && camera) {
+        renderer.render(scene, camera)
+      }
     }
 
     animate()
 
     // Handle resize
     const handleResize = () => {
-      if (!mountRef.current || !camera || !renderer) return
+      if (!mountRef.current || !cameraRef.current || !rendererRef.current) return
 
-      camera.aspect = mountRef.current.clientWidth / mountRef.current.clientHeight
-      camera.updateProjectionMatrix()
-      renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight)
+      cameraRef.current.aspect = mountRef.current.clientWidth / mountRef.current.clientHeight
+      cameraRef.current.updateProjectionMatrix()
+      rendererRef.current.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight)
     }
 
     window.addEventListener("resize", handleResize)
@@ -235,11 +240,13 @@ const ThreePortfolioBackground = ({ className  , activeCategory}: ThreePortfolio
       window.removeEventListener("mousemove", handleMouseMove)
       window.removeEventListener("resize", handleResize)
 
-      if (mountRef.current && renderer.domElement) {
-        mountRef.current.removeChild(renderer.domElement)
+      if (mountRef.current && rendererRef.current && rendererRef.current.domElement) {
+        mountRef.current.removeChild(rendererRef.current.domElement)
       }
 
-      renderer.dispose()
+      if (rendererRef.current) {
+        rendererRef.current.dispose()
+      }
     }
   }, [])
 

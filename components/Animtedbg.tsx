@@ -8,6 +8,7 @@ const AnimatedBackground: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+  if (typeof window !== "undefined" && containerRef.current instanceof HTMLElement) {
     if (!containerRef.current) return
 
     const container = containerRef.current
@@ -61,7 +62,8 @@ const AnimatedBackground: React.FC = () => {
     return () => {
       window.removeEventListener("mousemove", handleMouseMove)
     }
-  }, [])
+  
+}}, [])
 
   return (
     <div ref={containerRef} className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: -1 }}></div>

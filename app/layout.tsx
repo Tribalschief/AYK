@@ -1,10 +1,48 @@
-import "@/app/(frontend)/global.css"
+import type React from "react"
+import "./(frontend)/global.css"
+import { Inter } from "next/font/google"
+import Header from "@/components/Header/Header"
+import ScrollIndicator from "@/components/scroll-indicator"
+import type { Metadata } from "next"
 
-export const metadata = {
-  title: 'Ahmed Yar khan Portfolio',
-  description: 'Freelance UI/UX Designer & Web Developer specializing in React, Next.js, GSAP animations, AI-driven solutions, and cloud computing.',
+const inter = Inter({ subsets: ["latin"] })
+
+export const metadata: Metadata = {
+  title: "Ahmed Yar Khan | Next.js Developer | AI & Cloud Expert",
+  description:
+    "Full-stack developer specializing in Next.js, AI-driven solutions, and cloud computing. Experienced in building modern web applications with cutting-edge technologies.",
+  keywords:
+    "Ahmed Yar Khan, Next.js developer, agentic AI developer, cloud developer, web development, AI solutions, full-stack developer",
+  authors: [{ name: "Ahmed Yar Khan" }],
+  creator: "Ahmed Yar Khan",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://ahmedyarkhan.dev",
+    title: "Ahmed Yar Khan | Next.js Developer | AI & Cloud Expert",
+    description: "Full-stack developer specializing in Next.js, AI-driven solutions, and cloud computing.",
+    siteName: "Ahmed Yar Khan Portfolio",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Ahmed Yar Khan - Next.js Developer",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Ahmed Yar Khan | Next.js Developer | AI & Cloud Expert",
+    description: "Full-stack developer specializing in Next.js, AI-driven solutions, and cloud computing.",
+    creator: "@Ahmedkhakwanii",
+    images: ["/og-image.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 }
-
 
 export default function RootLayout({
   children,
@@ -12,63 +50,34 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body>
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Person",
+              name: "Ahmed Yar Khan",
+              url: "https://ahmedyarkhan.vercel.app",
+              jobTitle: "Next.js Developer, AI & Cloud Expert",
+              sameAs: [
+                "https://github.com/Tribalschief",
+                "https://www.linkedin.com/in/ahmed-yar-khan/",
+                "https://x.com/Ahmedkhakwanii",
+              ],
+              knowsAbout: ["Next.js", "React", "AI Development", "Cloud Computing", "Full-Stack Development"],
+            }),
+          }}
+        />
+      </head>
+      <body className={inter.className}>
         
-        {children}
-        </body>
+          <Header />
+          <ScrollIndicator />
+          {children}
+        
+      </body>
     </html>
   )
 }
-
-/*import { useRouter } from "next/router";
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-
-interface LayoutProps {
-  children: React.ReactNode;
-}
-
-const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const router = useRouter();
-  const pageRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const el = pageRef.current;
-    if (!el) return;
-
-    // Initial fade-in animation
-    gsap.fromTo(
-      el,
-      { opacity: 0, x: -200 },
-      { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }
-    );
-
-    // Page exit animation
-    const handleRouteChange = () => {
-      return new Promise<void>((resolve) => {
-        gsap.to(el, {
-          opacity: 0,
-          x: 200,
-          duration: 0.4,
-          ease: "power3.in",
-          onComplete: () => resolve(),
-        });
-      });
-    };
-
-    router.events.on("routeChangeStart", handleRouteChange);
-    return () => {
-      router.events.off("routeChangeStart", handleRouteChange);
-    };
-  }, [router.pathname]);
-
-  return (
-    <div ref={pageRef} className="relative overflow-hidden">
-      {children}
-    </div>
-  );
-};
-
-export default Layout;
-*/

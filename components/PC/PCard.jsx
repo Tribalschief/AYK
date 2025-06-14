@@ -1,17 +1,18 @@
 "use client"
 
-import { useRef } from "react"
+import { useRef, useEffect } from "react"
 import Image from "next/image"
 import { gsap } from "gsap"
 
-
-
 const ProjectCard3D = ({ project }) => {
-  const cardRef = useRef<HTMLDivElement>(null)
+  const cardRef = useRef(null)
 
-  const handleMouseEnter = () => {
-    if (cardRef.current) {
-      gsap.to(cardRef.current, {
+  useEffect(() => {
+    const card = cardRef.current
+    if (!card) return
+
+    const handleMouseEnter = () => {
+      gsap.to(card, {
         scale: 1.05,
         rotationY: 5,
         rotationX: 5,
@@ -20,11 +21,9 @@ const ProjectCard3D = ({ project }) => {
         ease: "power2.out",
       })
     }
-  }
 
-  const handleMouseLeave = () => {
-    if (cardRef.current) {
-      gsap.to(cardRef.current, {
+    const handleMouseLeave = () => {
+      gsap.to(card, {
         scale: 1,
         rotationY: 0,
         rotationX: 0,
@@ -33,7 +32,15 @@ const ProjectCard3D = ({ project }) => {
         ease: "power2.out",
       })
     }
-  }
+
+    card.addEventListener("mouseenter", handleMouseEnter)
+    card.addEventListener("mouseleave", handleMouseLeave)
+
+    return () => {
+      card.removeEventListener("mouseenter", handleMouseEnter)
+      card.removeEventListener("mouseleave", handleMouseLeave)
+    }
+  }, [])
 
   return (
     <div
@@ -43,8 +50,6 @@ const ProjectCard3D = ({ project }) => {
         transformStyle: "preserve-3d",
         boxShadow: "0 20px 40px -12px rgba(0, 0, 0, 0.6)",
       }}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
     >
       {/* Holographic glow effect */}
       <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl" />
@@ -75,15 +80,16 @@ const ProjectCard3D = ({ project }) => {
 
         {/* Tags */}
         <div className="flex flex-wrap gap-2">
-          {project.tags.slice(0, 3).map((tag) => (
-            <span
-              key={tag}
-              className="px-2 py-1 bg-purple-600/20 text-purple-300 text-xs rounded-full border border-purple-500/30"
-            >
-              {tag}
-            </span>
-          ))}
-          {project.tags.length > 3 && (
+          {project.tags &&
+            project.tags.slice(0, 3).map((tag) => (
+              <span
+                key={tag}
+                className="px-2 py-1 bg-purple-600/20 text-purple-300 text-xs rounded-full border border-purple-500/30"
+              >
+                {tag}
+              </span>
+            ))}
+          {project.tags && project.tags.length > 3 && (
             <span className="px-2 py-1 bg-gray-600/20 text-gray-400 text-xs rounded-full">
               +{project.tags.length - 3}
             </span>
@@ -93,7 +99,7 @@ const ProjectCard3D = ({ project }) => {
         {/* Action Button */}
         <div className="pt-4">
           <a
-            href={project.link}
+            href={project.link || "#"}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25 group-hover:scale-105"

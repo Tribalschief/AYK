@@ -19,7 +19,7 @@ const ThreeHeroBackground = ({ className }: ThreeHeroBackgroundProps) => {
 
     // Scene setup
     const scene = new THREE.Scene()
-    scene.fog = new THREE.Fog(0x0a0a0a, 1, 100)
+    scene.fog = new THREE.Fog(0x000000, 1, 100) // Black fog
     sceneRef.current = scene
 
     // Camera setup
@@ -46,7 +46,7 @@ const ThreeHeroBackground = ({ className }: ThreeHeroBackgroundProps) => {
 
     mountRef.current.appendChild(renderer.domElement)
 
-    // Create DNA helix structure
+    // Create DNA helix structure - now in black and white
     const helixGroup = new THREE.Group()
     const helixRadius = 5
     const helixHeight = 20
@@ -60,10 +60,10 @@ const ThreeHeroBackground = ({ className }: ThreeHeroBackgroundProps) => {
       const sphere1 = new THREE.Mesh(
         new THREE.SphereGeometry(0.2, 8, 8),
         new THREE.MeshPhysicalMaterial({
-          color: 0x3b82f6,
+          color: 0xffffff, // White
           metalness: 0.8,
           roughness: 0.2,
-          emissive: 0x001122,
+          emissive: 0x222222, // Dark gray
           emissiveIntensity: 0.5,
         }),
       )
@@ -74,10 +74,10 @@ const ThreeHeroBackground = ({ className }: ThreeHeroBackgroundProps) => {
       const sphere2 = new THREE.Mesh(
         new THREE.SphereGeometry(0.2, 8, 8),
         new THREE.MeshPhysicalMaterial({
-          color: 0x8b5cf6,
+          color: 0xcccccc, // Light gray
           metalness: 0.8,
           roughness: 0.2,
-          emissive: 0x220011,
+          emissive: 0x111111, // Very dark gray
           emissiveIntensity: 0.5,
         }),
       )
@@ -90,7 +90,7 @@ const ThreeHeroBackground = ({ className }: ThreeHeroBackgroundProps) => {
         const line = new THREE.Line(
           lineGeometry,
           new THREE.LineBasicMaterial({
-            color: 0x666666,
+            color: 0x666666, // Medium gray
             transparent: true,
             opacity: 0.3,
           }),
@@ -101,7 +101,7 @@ const ThreeHeroBackground = ({ className }: ThreeHeroBackgroundProps) => {
 
     scene.add(helixGroup)
 
-    // Create floating neural network
+    // Create floating neural network - now in black and white
     const networkGroup = new THREE.Group()
     const nodes: THREE.Mesh[] = []
     const nodeCount = 50
@@ -110,10 +110,10 @@ const ThreeHeroBackground = ({ className }: ThreeHeroBackgroundProps) => {
       const node = new THREE.Mesh(
         new THREE.SphereGeometry(0.1, 8, 8),
         new THREE.MeshPhysicalMaterial({
-          color: 0x06b6d4,
+          color: 0xffffff, // White
           metalness: 0.9,
           roughness: 0.1,
-          emissive: 0x002244,
+          emissive: 0x222222, // Dark gray
           emissiveIntensity: 0.3,
         }),
       )
@@ -133,7 +133,7 @@ const ThreeHeroBackground = ({ className }: ThreeHeroBackgroundProps) => {
           const line = new THREE.Line(
             lineGeometry,
             new THREE.LineBasicMaterial({
-              color: 0x3b82f6,
+              color: 0xffffff, // White
               transparent: true,
               opacity: 0.2,
             }),
@@ -145,7 +145,7 @@ const ThreeHeroBackground = ({ className }: ThreeHeroBackgroundProps) => {
 
     scene.add(networkGroup)
 
-    // Advanced particle system with shaders
+    // Advanced particle system with shaders - now in black and white
     const particleCount = 2000
     const particleGeometry = new THREE.BufferGeometry()
     const particlePositions = new Float32Array(particleCount * 3)
@@ -167,12 +167,12 @@ const ThreeHeroBackground = ({ className }: ThreeHeroBackgroundProps) => {
     particleGeometry.setAttribute("position", new THREE.BufferAttribute(particlePositions, 3))
     particleGeometry.setAttribute("size", new THREE.BufferAttribute(particleSizes, 1))
 
-    // Custom shader material for particles
+    // Custom shader material for particles - now in black and white
     const particleMaterial = new THREE.ShaderMaterial({
       uniforms: {
         time: { value: 0 },
-        color1: { value: new THREE.Color(0x3b82f6) },
-        color2: { value: new THREE.Color(0x8b5cf6) },
+        color1: { value: new THREE.Color(0xffffff) }, // White
+        color2: { value: new THREE.Color(0xcccccc) }, // Light gray
       },
       vertexShader: `
         attribute float size;
@@ -180,7 +180,7 @@ const ThreeHeroBackground = ({ className }: ThreeHeroBackgroundProps) => {
         varying vec3 vColor;
         
         void main() {
-          vColor = mix(vec3(0.23, 0.51, 0.96), vec3(0.55, 0.36, 0.96), sin(time + position.x * 0.01) * 0.5 + 0.5);
+          vColor = mix(vec3(1.0, 1.0, 1.0), vec3(0.8, 0.8, 0.8), sin(time + position.x * 0.01) * 0.5 + 0.5);
           
           vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
           gl_PointSize = size * (300.0 / -mvPosition.z);
@@ -204,21 +204,21 @@ const ThreeHeroBackground = ({ className }: ThreeHeroBackgroundProps) => {
     const particles = new THREE.Points(particleGeometry, particleMaterial)
     scene.add(particles)
 
-    // Lighting
+    // Lighting - now in black and white
     const ambientLight = new THREE.AmbientLight(0x404040, 0.3)
     scene.add(ambientLight)
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8)
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8) // White light
     directionalLight.position.set(10, 10, 5)
     directionalLight.castShadow = true
     scene.add(directionalLight)
 
-    // Rim lighting
-    const rimLight1 = new THREE.DirectionalLight(0x3b82f6, 0.5)
+    // Rim lighting - now in black and white
+    const rimLight1 = new THREE.DirectionalLight(0xffffff, 0.5) // White light
     rimLight1.position.set(-10, 0, -10)
     scene.add(rimLight1)
 
-    const rimLight2 = new THREE.DirectionalLight(0x8b5cf6, 0.5)
+    const rimLight2 = new THREE.DirectionalLight(0xcccccc, 0.5) // Light gray light
     rimLight2.position.set(10, 0, -10)
     scene.add(rimLight2)
 
@@ -246,8 +246,8 @@ const ThreeHeroBackground = ({ className }: ThreeHeroBackgroundProps) => {
       const time = Date.now() * 0.001
 
       // Update shader uniforms
-      if (particleMaterial.uniforms) {
-        particleMaterial.uniforms.time.value = time
+      if ((particleMaterial as THREE.ShaderMaterial).uniforms) {
+        ;(particleMaterial as THREE.ShaderMaterial).uniforms.time.value = time
       }
 
       // Animate helix
@@ -273,10 +273,14 @@ const ThreeHeroBackground = ({ className }: ThreeHeroBackgroundProps) => {
       particles.geometry.attributes.position.needsUpdate = true
 
       // Smooth camera movement
-      camera.position.lerp(targetCameraPosition, 0.05)
-      camera.lookAt(0, 0, 0)
+      if (camera) {
+        camera.position.lerp(targetCameraPosition, 0.05)
+        camera.lookAt(0, 0, 0)
+      }
 
-      renderer.render(scene, camera)
+      if (renderer && camera) {
+        renderer.render(scene, camera)
+      }
     }
 
     animate()

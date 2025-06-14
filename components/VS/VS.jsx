@@ -111,7 +111,7 @@ const VideoSection = () => {
         </video>
       </div>
       <div className="img-container">
-        <Image src={win} alt="" layout="fill" objectFit="cover" className="img" />
+        <Image src={win} alt="" width={100} height={100}  className="img" />
       </div>
       <div className="text-content">
         <div className="img_txt">

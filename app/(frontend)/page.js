@@ -3,6 +3,7 @@ import VideoSection from '@/components/VS/VS';
 import UltimateHome from '../../components/Intro';
 import UltimateServices from '../../components/Services';
 import UltimatePortfolioContact from '../../components/Portfolio';
+import Experience from '@/components/Experience';
 
 export default function Home() {
   
@@ -12,6 +13,7 @@ export default function Home() {
       <VideoSection />
       <div>
         <UltimateHome />
+        <Experience/>
         <UltimateServices />
         <UltimatePortfolioContact />
       </div>
