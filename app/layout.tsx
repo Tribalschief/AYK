@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://ahmedyarkhan.dev",
+    url: "https://ahmedyarkhan.vercel.app",
     title: "Ahmed Yar Khan | Next.js Developer | AI & Cloud Expert",
     description: "Full-stack developer specializing in Next.js, AI-driven solutions, and cloud computing.",
     siteName: "Ahmed Yar Khan Portfolio",
