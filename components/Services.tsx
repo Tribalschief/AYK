@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import { useTheme } from "next-themes"
 import Image from "next/image"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
@@ -58,6 +59,7 @@ const UltimateServices = () => {
   const [titleElement, setTitleElement] = useState<HTMLHeadingElement | null>(null)
   const [categoriesElement, setCategoriesElement] = useState<HTMLDivElement | null>(null)
   const [contentElement, setContentElement] = useState<HTMLDivElement | null>(null)
+  const { resolvedTheme } = useTheme()
 
   const containerRef = useCallback((node: HTMLDivElement | null) => {
     setContainerElement(node)
@@ -140,14 +142,16 @@ const UltimateServices = () => {
     }
   }, [activeCategory, contentElement])
 
+  const isLight = resolvedTheme === "light"
+
   return (
-    <section id="services" className="relative min-h-screen overflow-hidden bg-black">
+    <section id="services" className={`relative min-h-screen overflow-hidden ${isLight ? "bg-white" : "bg-black"}`}>
       <ThreeSkillsBackground className="absolute inset-0 w-full h-full" activeCategory={activeCategory} />
       <CursorEffect />
 
       <div ref={containerRef} className="relative z-10 max-w-7xl mx-auto px-8 py-20">
         <h2 ref={titleRef} className="text-6xl md:text-8xl font-bold text-center mb-20 glitch" data-text="My Expertise">
-          <span className="bg-gradient-to-r from-white via-gray-300 to-white bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-foreground via-foreground/70 to-foreground bg-clip-text text-transparent">
             My Expertise
           </span>
         </h2>
@@ -156,14 +160,14 @@ const UltimateServices = () => {
           {skillCategories.map((category, index) => (
             <div key={category.name} className="relative">
               {category.name === activeCategory && (
-                <div className="absolute -inset-2 rounded-3xl bg-white opacity-20 blur-sm animate-pulse" />
+                <div className="absolute -inset-2 rounded-3xl bg-primary/20 blur-sm animate-pulse" />
               )}
 
               <div
                 className={`absolute -top-3 -left-3 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold z-20 transition-all duration-500 ${
                   category.name === activeCategory
-                    ? "bg-white text-black shadow-lg shadow-white/50 scale-110"
-                    : "bg-gray-700/80 text-gray-400 border border-gray-600"
+                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/50 scale-110"
+                    : "bg-muted text-muted-foreground border border-border"
                 }`}
               >
                 {index + 1}
@@ -175,17 +179,21 @@ const UltimateServices = () => {
                   relative px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-700 group overflow-hidden
                   ${
                     category.name === activeCategory
-                      ? "bg-white text-black shadow-2xl shadow-white/50 scale-110 border-2 border-white/50"
-                      : "bg-white/5 text-gray-300 hover:bg-white/10 backdrop-blur-xl border border-white/10 hover:border-white/30"
+                      ? "bg-primary text-primary-foreground shadow-2xl shadow-primary/50 scale-110 border-2 border-primary/50"
+                      : "bg-card/50 text-card-foreground hover:bg-card/80 backdrop-blur-xl border border-border hover:border-primary/30"
                   }
                 `}
               >
                 <span className="relative z-10 flex items-center gap-2">
-                  {category.name === activeCategory && <div className="w-2 h-2 bg-black rounded-full animate-pulse" />}
+                  {category.name === activeCategory && (
+                    <div className="w-2 h-2 bg-primary-foreground rounded-full animate-pulse" />
+                  )}
                   {category.name}
                   <span
                     className={`ml-2 px-2 py-1 rounded-full text-xs font-medium ${
-                      category.name === activeCategory ? "bg-black/20 text-black" : "bg-gray-600/50 text-gray-400"
+                      category.name === activeCategory
+                        ? "bg-primary-foreground/20 text-primary-foreground"
+                        : "bg-muted text-muted-foreground"
                     }`}
                   >
                     {category.skills.length}
@@ -201,8 +209,8 @@ const UltimateServices = () => {
             (category) =>
               category.name === activeCategory && (
                 <div key={category.name} className="space-y-12">
-                  <div className="relative bg-gradient-to-br from-gray-900/80 to-gray-800/60 backdrop-blur-2xl rounded-3xl p-10 border border-white/10 shadow-2xl overflow-hidden">
-                    <p className="relative text-2xl text-gray-200 leading-relaxed text-center font-light">
+                  <div className="relative bg-card/80 backdrop-blur-2xl rounded-3xl p-10 border border-border shadow-2xl overflow-hidden">
+                    <p className="relative text-2xl text-card-foreground leading-relaxed text-center font-light">
                       {category.description}
                     </p>
                   </div>
@@ -211,12 +219,12 @@ const UltimateServices = () => {
                     {category.skills.map((skill) => (
                       <div
                         key={skill.name}
-                        className="group relative bg-gradient-to-br from-gray-900/60 to-gray-800/40 backdrop-blur-2xl rounded-3xl p-8 border border-white/10 transition-all duration-700 hover:border-white/50 overflow-hidden"
+                        className="group relative bg-card/60 backdrop-blur-2xl rounded-3xl p-8 border border-border transition-all duration-700 hover:border-primary/50 overflow-hidden"
                       >
                         <div className="relative flex items-center mb-8">
                           <div className="relative w-20 h-20 mr-6">
-                            <div className="absolute inset-0 bg-white rounded-2xl blur-sm opacity-50 group-hover:opacity-80 transition-opacity duration-300" />
-                            <div className="relative w-full h-full bg-gray-800/80 rounded-2xl p-3 border border-white/20 backdrop-blur-sm">
+                            <div className="absolute inset-0 bg-primary/50 rounded-2xl blur-sm opacity-50 group-hover:opacity-80 transition-opacity duration-300" />
+                            <div className="relative w-full h-full bg-muted/80 rounded-2xl p-3 border border-border backdrop-blur-sm">
                               <Image
                                 src={skill.icon || "/placeholder.svg"}
                                 alt={`${skill.name} icon`}
@@ -226,30 +234,30 @@ const UltimateServices = () => {
                               />
                             </div>
                           </div>
-                          <h3 className="text-3xl font-bold text-white group-hover:text-gray-300 transition-colors duration-300">
+                          <h3 className="text-3xl font-bold text-foreground group-hover:text-primary transition-colors duration-300">
                             {skill.name}
                           </h3>
                         </div>
 
                         <div className="relative">
                           <div className="flex justify-between items-center mb-4">
-                            <span className="text-sm text-gray-400 font-medium">Proficiency Level</span>
-                            <span className="text-2xl font-bold text-white">{skill.level}%</span>
+                            <span className="text-sm text-muted-foreground font-medium">Proficiency Level</span>
+                            <span className="text-2xl font-bold text-foreground">{skill.level}%</span>
                           </div>
 
-                          <div className="relative h-4 bg-gray-700/50 rounded-full overflow-hidden backdrop-blur-sm">
+                          <div className="relative h-4 bg-muted/50 rounded-full overflow-hidden backdrop-blur-sm">
                             <div
-                              className="relative h-full bg-gradient-to-r from-white to-gray-300 rounded-full transition-all duration-2000 ease-out"
+                              className="relative h-full bg-gradient-to-r from-primary to-primary/70 rounded-full transition-all duration-2000 ease-out"
                               style={{
                                 width: `${skill.level}%`,
-                                boxShadow: "0 0 20px rgba(255, 255, 255, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.3)",
+                                boxShadow: `0 0 20px hsl(var(--primary) / 0.8), inset 0 1px 0 hsl(var(--primary) / 0.3)`,
                               }}
                             >
-                              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent rounded-full animate-pulse" />
+                              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary-foreground/30 to-transparent rounded-full animate-pulse" />
                             </div>
                           </div>
 
-                          <div className="flex justify-between mt-2 text-xs text-gray-500">
+                          <div className="flex justify-between mt-2 text-xs text-muted-foreground">
                             <span>Beginner</span>
                             <span>Intermediate</span>
                             <span>Expert</span>

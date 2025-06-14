@@ -1,8 +1,10 @@
 import type React from "react"
+import { ThemeProvider } from "@/components/theme-provider"
 import "./(frontend)/global.css"
 import { Inter } from "next/font/google"
 import Header from "@/components/Header/Header"
 import ScrollIndicator from "@/components/scroll-indicator"
+import ThemeToggle from "@/components/theme-toggle"
 import type { Metadata } from "next"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -72,11 +74,12 @@ export default function RootLayout({
         />
       </head>
       <body className={inter.className}>
-        
+        <ThemeProvider attribute="class" defaultTheme="dark">
           <Header />
           <ScrollIndicator />
+          <ThemeToggle />
           {children}
-        
+        </ThemeProvider>
       </body>
     </html>
   )

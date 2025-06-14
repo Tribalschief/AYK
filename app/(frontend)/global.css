@@ -25,6 +25,29 @@
   --radius: 0.5rem;
 }
 
+/* Light theme variables */
+.light {
+  --background: 0 0% 100%;
+  --foreground: 0 0% 0%;
+  --card: 0 0% 97%;
+  --card-foreground: 0 0% 2%;
+  --popover: 0 0% 97%;
+  --popover-foreground: 0 0% 2%;
+  --primary: 0 0% 2%;
+  --primary-foreground: 0 0% 91%;
+  --secondary: 0 0% 85.1%;
+  --secondary-foreground: 0 0% 2%;
+  --muted: 0 0% 85.1%;
+  --muted-foreground: 0 0% 36.1%;
+  --accent: 0 0% 85.1%;
+  --accent-foreground: 0 0% 2%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 2%;
+  --border: 0 0% 85.1%;
+  --input: 0 0% 85.1%;
+  --ring: 0 0% 16.1%;
+}
+
 * {
   @apply border-border;
 }
@@ -34,7 +57,7 @@ body {
   font-feature-settings: "rlig" 1, "calt" 1;
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar - Dark theme */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -52,6 +75,20 @@ body {
   background: rgba(255, 255, 255, 0.3);
 }
 
+/* Custom scrollbar - Light theme */
+.light ::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.light ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.light ::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
 /* Section animations */
 .section-reveal {
   opacity: 0;
@@ -64,7 +101,7 @@ body {
   transform: translateY(0);
 }
 
-/* Cursor effect */
+/* Cursor effect - Dark theme */
 .cursor-dot {
   pointer-events: none;
   position: fixed;
@@ -93,7 +130,16 @@ body {
   transition: transform 0.15s ease, width 0.3s ease, height 0.3s ease;
 }
 
-/* Active section indicator */
+/* Cursor effect - Light theme */
+.light .cursor-dot {
+  background-color: black;
+}
+
+.light .cursor-outline {
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+/* Active section indicator - Dark theme */
 .section-indicator {
   position: fixed;
   right: 20px;
@@ -118,7 +164,16 @@ body {
   transform: scale(1.5);
 }
 
-/* Glitch effect */
+/* Active section indicator - Light theme */
+.light .section-indicator-dot {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.light .section-indicator-dot.active {
+  background-color: black;
+}
+
+/* Glitch effect - Dark theme */
 .glitch {
   position: relative;
 }
@@ -145,6 +200,15 @@ body {
   text-shadow: -1px 0 white;
   clip: rect(85px, 550px, 140px, 0);
   animation: glitch-anim-2 2s infinite linear alternate-reverse;
+}
+
+/* Glitch effect - Light theme */
+.light .glitch::before {
+  text-shadow: -1px 0 black;
+}
+
+.light .glitch::after {
+  text-shadow: -1px 0 black;
 }
 
 @keyframes glitch-anim-1 {
@@ -189,10 +253,15 @@ body {
   }
 }
 
-/* Enhanced Hover Effects */
+/* Enhanced Hover Effects - Dark theme */
 .hover-glow:hover {
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
   transition: box-shadow 0.3s ease;
+}
+
+/* Enhanced Hover Effects - Light theme */
+.light .hover-glow:hover {
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
 }
 
 .hover-scale:hover {
@@ -227,4 +296,47 @@ body {
   to {
     opacity: 1;
   }
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.light .theme-toggle {
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.theme-toggle:hover {
+  transform: scale(1.1);
+}
+
+.theme-toggle svg {
+  width: 24px;
+  height: 24px;
+  color: white;
+  transition: transform 0.3s ease;
+}
+
+.light .theme-toggle svg {
+  color: black;
+}
+
+.theme-toggle:hover svg {
+  transform: rotate(180deg);
 }
