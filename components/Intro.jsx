@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react"
 import { gsap } from "gsap"
 import ThreeHeroBackground from "./three-hero-background"
-import CursorEffect from "./cursor-effect"
+
 
 const HeroSection = () => {
   const titleRef = useRef(null)
@@ -44,7 +44,7 @@ const HeroSection = () => {
   return (
     <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
       <ThreeHeroBackground className="absolute inset-0 w-full h-full" />
-      <CursorEffect />
+      {/* <CursorEffect /> */}
 
       <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
         <h1 ref={titleRef} className="text-6xl md:text-8xl font-bold mb-6 glitch" data-text="Ahmed Yar Khan">

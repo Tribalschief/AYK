@@ -6,7 +6,7 @@ import { useTheme } from "next-themes"
 import { getProject } from "@/action/getProject"
 import ThreePortfolioBackground from "./three-portfolio-background"
 import ProjectCard3D from "./PC/PCard"
-import CursorEffect from "./cursor-effect"
+
 import { gsap } from "gsap"
 
 const ProjectShowcase = () => {
@@ -99,7 +99,7 @@ const ProjectShowcase = () => {
 
   return (
     <div className="relative">
-      <CursorEffect />
+      {/* <CursorEffect /> */}
 
       <section
         ref={portfolioRef}

@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import ThreeHeroBackground from "./three-hero-background"
-import CursorEffect from "./cursor-effect"
+// import CursorEffect from "./cursor-effect"
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -114,7 +114,7 @@ const Experience = () => {
   return (
     <section id="experience" className="relative min-h-screen overflow-hidden bg-black">
       <ThreeHeroBackground className="absolute inset-0 w-full h-full" />
-      <CursorEffect />
+      {/* <CursorEffect /> */}
 
       <div className="relative z-10 max-w-6xl mx-auto px-8 py-20">
         {/* Title */}

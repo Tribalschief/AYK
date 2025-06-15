@@ -6,7 +6,7 @@ import Image from "next/image"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import ThreeSkillsBackground from "./three-skills-background"
-import CursorEffect from "./cursor-effect"
+
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -145,9 +145,9 @@ const UltimateServices = () => {
   const isLight = resolvedTheme === "light"
 
   return (
-    <section id="services" className={`relative min-h-screen overflow-hidden ${isLight ? "bg-white" : "bg-black"}`}>
+    <section id="services" className={`relative min-h-screen overflow-hidden ${isLight ? "bg-black" : "bg-white"}`}>
       <ThreeSkillsBackground className="absolute inset-0 w-full h-full" activeCategory={activeCategory} />
-      <CursorEffect />
+      {/* <CursorEffect /> */}
 
       <div ref={containerRef} className="relative z-10 max-w-7xl mx-auto px-8 py-20">
         <h2 ref={titleRef} className="text-6xl md:text-8xl font-bold text-center mb-20 glitch" data-text="My Expertise">
