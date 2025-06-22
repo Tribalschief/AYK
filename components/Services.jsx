@@ -121,7 +121,7 @@ const UltimateServicesMinimal = () => {
   return (
     <section
       id="services"
-      className={`relative min-h-screen overflow-hidden ${isLight ? "bg-black" : "bg-white"}`}
+      className={`relative min-h-screen overflow-hidden ${isLight ? "bg-white" : "bg-black"}`}
       ref={containerRefCallback}
     >
       <ThreeSkillsBackground className="absolute inset-0 w-full h-full" activeCategory={activeCategory} />

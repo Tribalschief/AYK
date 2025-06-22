@@ -95,7 +95,7 @@ const ProjectCardModern = ({ project }) => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onClick={handleProjectClick}
-      className="group relative w-full grid sm:grid-cols-1 md:grid-cols-2 bg-card rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer border border-border hover-glow hover:scale-110"
+      className="group relative w-full grid grid-cols-2 my-2 mx-2  bg-card rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer border border-border hover-glow hover:scale-110"
     >
       {/* Image Section */}
       <div className="relative h-64 overflow-hidden bg-muted">
@@ -172,7 +172,7 @@ const ProjectCardModern = ({ project }) => {
         <div className="flex items-center justify-between pt-4 border-t border-border">
           <button
             onClick={handleProjectClick}
-            className="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary/80 text-primary-foreground text-sm font-medium rounded-lg transition-colors duration-200"
+            className="flex items-center dark:text-white  text-black rounded-sm gap-2 px-4 py-2 bg-primary hover:bg-primary/80 text-primary-foreground text-sm font-medium rounded-lg transition-colors duration-200"
           >
             View Project
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

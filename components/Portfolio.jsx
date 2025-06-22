@@ -137,8 +137,8 @@ const ProjectShowcase = () => {
   const contactInfo = useMemo(
     () => [
       { icon: "📧", label: "Email", value: "mahmedyk789@gmail.com" },
-      { icon: "📱", label: "Phone", value: "+1 (555) 123-4567" },
-      { icon: "📍", label: "Location", value: "San Francisco, CA" },
+      { icon: "📱", label: "Phone", value: "+923229527732" },
+      { icon: "📍", label: "Location", value: "Karachi, Pakistan" },
       { icon: "💼", label: "LinkedIn", value: "linkedin.com/in/ahmedyarkhan" },
     ],
     [],
@@ -223,10 +223,10 @@ const ProjectShowcase = () => {
             </div>
           )}
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          <div className="">
             {filteredProjects.length > 0 ? (
               filteredProjects.map((project) => (
-                <div key={project.id || project._id || Math.random().toString()} className="project-card-wrapper">
+                <div key={project.id || project._id || Math.random().toString()} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                   <ProjectCardModern project={project} />
                 </div>
               ))
