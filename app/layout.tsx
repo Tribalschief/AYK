@@ -4,46 +4,45 @@ import "./(frontend)/global.css"
 import { Inter } from "next/font/google"
 import Header from "@/components/Header/Header"
 import ScrollIndicator from "@/components/scroll-indicator"
-import ThemeToggle from "@/components/theme-toggle"
+import profile from "@/assets/pp.png"
 import type { Metadata } from "next"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Ahmed Yar Khan | Next.js Developer | AI & Cloud Expert",
-  description:
-    "Full-stack developer specializing in Next.js, AI-driven solutions, and cloud computing. Experienced in building modern web applications with cutting-edge technologies.",
-  keywords:
-    "Ahmed Yar Khan, Next.js developer, agentic AI developer, cloud developer, web development, AI solutions, full-stack developer",
+  metadataBase: new URL("https://ahmedyarkhan.vercel.app"), // Set your actual website URL
+  title: "Ahmed Yar Khan",
+  description: "Full-stack developer specializing in Next.js, AI-driven solutions, and cloud computing. Experienced in building modern web applications with cutting-edge technologies.",
+  keywords: "Ahmed Yar Khan, Next.js developer, agentic AI developer, cloud developer, web development, AI solutions, full-stack developer",
   authors: [{ name: "Ahmed Yar Khan" }],
   creator: "Ahmed Yar Khan",
   openGraph: {
     type: "website",
     locale: "en_US",
     url: "https://ahmedyarkhan.vercel.app",
-    title: "Ahmed Yar Khan | Next.js Developer | AI & Cloud Expert",
+    title: "Ahmed Yar Khan ",
     description: "Full-stack developer specializing in Next.js, AI-driven solutions, and cloud computing.",
     siteName: "Ahmed Yar Khan Portfolio",
     images: [
       {
-        url: "/og-image.png",
+        url: profile.src,
         width: 1200,
         height: 630,
-        alt: "Ahmed Yar Khan - Next.js Developer",
-      },
-    ],
+        alt: "Ahmed Yar Khan - Next.js Developer"
+      }
+    ]
   },
   twitter: {
     card: "summary_large_image",
     title: "Ahmed Yar Khan | Next.js Developer | AI & Cloud Expert",
     description: "Full-stack developer specializing in Next.js, AI-driven solutions, and cloud computing.",
     creator: "@Ahmedkhakwanii",
-    images: ["/og-image.png"],
+    images: ["/og-image.png"]
   },
   robots: {
     index: true,
-    follow: true,
-  },
+    follow: true
+  }
 }
 
 export default function RootLayout({
@@ -77,7 +76,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="dark">
           <Header />
           <ScrollIndicator />
-          <ThemeToggle />
+          
           {children}
         </ThemeProvider>
       </body>

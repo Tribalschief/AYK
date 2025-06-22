@@ -1,13 +1,16 @@
 "use client"
 
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useMemo, useCallback, useRef ,useEffect   } from "react"
 import { useTheme } from "next-themes"
 import { getProject } from "@/action/getProject"
-import ThreePortfolioBackground from "./three-portfolio-background"
-import ProjectCard3D from "./PC/PCard"
+import dynamic from "next/dynamic"
+const ThreePortfolioBackground = dynamic(() => import("./three-portfolio-background"), { ssr: false })
 
+import ProjectCardModern from "./PC/PCard"
 import { gsap } from "gsap"
+import CursorEffect from "./cursor-effect"
+
 
 const ProjectShowcase = () => {
   const [activeCategory, setActiveCategory] = useState(null)
@@ -20,95 +23,154 @@ const ProjectShowcase = () => {
     message: "",
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isProjectsLoaded, setIsProjectsLoaded] = useState(false)
+  const [client, setClient] = useState(false)
+  
+    useEffect(()=>{
+      setClient(true)
+    },[])
+    if(false){
+      console.log(client)
+    }
   const { resolvedTheme } = useTheme()
-
   const portfolioRef = useRef(null)
   const contactRef = useRef(null)
   const titleRef = useRef(null)
+  
 
-  const categories = projects.length > 0 ? Array.from(new Set(projects.map((p) => p.category).filter(Boolean))) : []
-  const tags = projects.length > 0 ? Array.from(new Set(projects.flatMap((p) => p.tags || []).filter(Boolean))) : []
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await getProject()
-        if (Array.isArray(result)) {
-          setProjects(result)
-        } else {
-          setProjects([])
-        }
-      } catch (error) {
-        console.error("Error fetching projects:", error)
+
+  // Memoize theme-based styling
+  const isLight = useMemo(() => resolvedTheme === "light", [resolvedTheme])
+
+  // Memoize project categories and tags
+  const { categories, tags } = useMemo(() => {
+    if (projects.length === 0) return { categories: [], tags: [] }
+
+    const cats = Array.from(new Set(projects.map((p) => p.category).filter(Boolean)))
+    const tagsList = Array.from(new Set(projects.flatMap((p) => p.tags || []).filter(Boolean)))
+
+    return { categories: cats, tags: tagsList }
+  }, [projects])
+
+  // Memoize filtered projects
+  const filteredProjects = useMemo(() => {
+    return projects.filter(
+      (project) =>
+        (!activeCategory || project.category === activeCategory) &&
+        (!activeTag || (project.tags && project.tags.includes(activeTag))),
+    )
+  }, [projects, activeCategory, activeTag])
+
+  // Memoized data fetching function
+  const fetchProjects = useCallback(async () => {
+    if (isProjectsLoaded) return
+
+    try {
+      const result = await getProject()
+      if (Array.isArray(result)) {
+        setProjects(result)
+      } else {
         setProjects([])
       }
+    } catch (error) {
+      console.error("Error fetching projects:", error)
+      setProjects([])
+    } finally {
+      setIsProjectsLoaded(true)
     }
-    fetchData()
-  }, [])
+  }, [isProjectsLoaded])
 
-  useEffect(() => {
-    if (titleRef.current) {
-      gsap.from(titleRef.current, {
-        y: 100,
-        opacity: 0,
-        duration: 1.5,
-        ease: "power3.out",
-        delay: 0.5,
-      })
-    }
-  }, [])
-
-  const filteredProjects = projects.filter(
-    (project) =>
-      (!activeCategory || project.category === activeCategory) &&
-      (!activeTag || (project.tags && project.tags.includes(activeTag))),
-  )
-
-  const handleCategoryClick = (category) => {
+  // Memoized category click handler
+  const handleCategoryClick = useCallback((category) => {
     setActiveCategory((prev) => (prev === category ? null : category))
     setActiveTag(null)
-  }
+  }, [])
 
-  const handleTagClick = (tag) => {
+  // Memoized tag click handler
+  const handleTagClick = useCallback((tag) => {
     setActiveTag((prev) => (prev === tag ? null : tag))
-  }
+  }, [])
 
-  const handleContactSubmit = async (e) => {
+  // Memoized form input change handler
+  const handleInputChange = useCallback((e) => {
+    const { name, value } = e.target
+    setContactForm((prev) => ({ ...prev, [name]: value }))
+  }, [])
+
+  // Memoized form submit handler
+  const handleContactSubmit = useCallback(async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
+
+    // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 2000))
+
     setContactForm({ name: "", email: "", subject: "", message: "" })
     setIsSubmitting(false)
     alert("Message sent successfully!")
-  }
+  }, [])
 
-  const handleInputChange = (e ) => {
-    const { name, value } = e.target
-    setContactForm((prev) => ({ ...prev, [name]: value }))
-  }
-
-  const scrollToContact = () => {
+  // Memoized scroll functions
+  const scrollToContact = useCallback(() => {
     contactRef.current?.scrollIntoView({ behavior: "smooth" })
-  }
+  }, [])
 
-  const scrollToPortfolio = () => {
+  const scrollToPortfolio = useCallback(() => {
     portfolioRef.current?.scrollIntoView({ behavior: "smooth" })
-  }
+  }, [])
 
-  const isLight = resolvedTheme === "light"
+  // Memoized title animation
+  const animateTitle = useCallback(() => {
+    if (!titleRef.current) return
+
+    gsap.from(titleRef.current, {
+      y: 100,
+      opacity: 0,
+      duration: 1.5,
+      ease: "power3.out",
+      delay: 0.5,
+    })
+  }, [])
+
+  // Memoized contact form data
+  const contactInfo = useMemo(
+    () => [
+      { icon: "📧", label: "Email", value: "mahmedyk789@gmail.com" },
+      { icon: "📱", label: "Phone", value: "+1 (555) 123-4567" },
+      { icon: "📍", label: "Location", value: "San Francisco, CA" },
+      { icon: "💼", label: "LinkedIn", value: "linkedin.com/in/ahmedyarkhan" },
+    ],
+    [],
+  )
+
+  // Initialize component
+  const initializeComponent = useCallback(
+    (node) => {
+      if (node) {
+        fetchProjects()
+        animateTitle()
+      }
+    },
+    [fetchProjects, animateTitle],
+  )
+  
 
   return (
     <div className="relative">
-      {/* <CursorEffect /> */}
+      <CursorEffect />
 
       <section
-        ref={portfolioRef}
+        ref={(node) => {
+          portfolioRef.current = node
+          initializeComponent(node)
+        }}
         id="portfolio"
         className={`relative min-h-screen overflow-hidden ${isLight ? "bg-white" : "bg-black"}`}
       >
         <ThreePortfolioBackground className="absolute inset-0 w-full h-full" activeCategory={activeCategory ?? ""} />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-8 py-20">
+        <div className="relative z-10 max-w-8xl mx-auto px-6 md:px-8 py-20">
           <h2
             ref={titleRef}
             className="text-6xl md:text-8xl font-bold text-center mb-16 glitch"
@@ -161,16 +223,18 @@ const ProjectShowcase = () => {
             </div>
           )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {filteredProjects.length > 0 ? (
               filteredProjects.map((project) => (
                 <div key={project.id || project._id || Math.random().toString()} className="project-card-wrapper">
-                  <ProjectCard3D project={project} />
+                  <ProjectCardModern project={project} />
                 </div>
               ))
             ) : (
-              <div className="col-span-3 text-center py-20">
-                <p className="text-muted-foreground text-xl">No projects found. Please check back later.</p>
+              <div className="col-span-1 sm:col-span-2 lg:col-span-3 text-center py-20">
+                <p className="text-muted-foreground text-xl">
+                  {isProjectsLoaded ? "No projects found. Please check back later." : "Loading projects..."}
+                </p>
               </div>
             )}
           </div>
@@ -215,12 +279,7 @@ const ProjectShowcase = () => {
                 </p>
 
                 <div className="space-y-6">
-                  {[
-                    { icon: "📧", label: "Email", value: "mahmedyk789@gmail.com" },
-                    { icon: "📱", label: "Phone", value: "+1 (555) 123-4567" },
-                    { icon: "📍", label: "Location", value: "San Francisco, CA" },
-                    { icon: "💼", label: "LinkedIn", value: "linkedin.com/in/ahmedyarkhan" },
-                  ].map((item, index) => (
+                  {contactInfo.map((item, index) => (
                     <div key={index} className="flex items-center space-x-4">
                       <div className="w-12 h-12 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xl">
                         {item.icon}

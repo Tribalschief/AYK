@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useEffect } from "react"
+import { useRef, useMemo, useCallback } from "react"
 import * as THREE from "three"
 
 interface ThreePortfolioBackgroundProps {
@@ -9,55 +9,51 @@ interface ThreePortfolioBackgroundProps {
 }
 
 const ThreePortfolioBackground = ({ className, activeCategory }: ThreePortfolioBackgroundProps) => {
-  const mountRef = useRef<HTMLDivElement>(null)
-  const sceneRef = useRef<THREE.Scene | null>(null)
-  const rendererRef = useRef<THREE.WebGLRenderer | null>(null)
-  const cameraRef = useRef<THREE.PerspectiveCamera | null>(null)
-  const frameRef = useRef<number | null>(null)
- 
+  const mountRef = useRef<HTMLDivElement | null>(null)
+  const sceneRef = useRef<THREE.Scene>()
+  const rendererRef = useRef<THREE.WebGLRenderer>()
+  const cameraRef = useRef<THREE.PerspectiveCamera>()
+  const frameRef = useRef<number>()
+  const mouseRef = useRef(new THREE.Vector2())
+  const targetCameraPositionRef = useRef(new THREE.Vector3(0, 0, 25))
   if(false){
-    console.log(mountRef.current, sceneRef.current, rendererRef.current, cameraRef.current, frameRef.current, activeCategory)
+    console.log(activeCategory)
   }
-  useEffect(() => {
-    if (!mountRef.current) return
+  // Memoize scene creation
+  const scene = useMemo(() => {
+    const newScene = new THREE.Scene()
+    newScene.fog = new THREE.Fog(0x000000, 10, 100)
+    return newScene
+  }, [])
 
-    // Scene setup
-    const scene = new THREE.Scene()
-    scene.fog = new THREE.Fog(0x000000, 10, 100) // Black fog
-    sceneRef.current = scene
+  // Memoize camera creation
+  const camera = useMemo(() => {
+    const newCamera = new THREE.PerspectiveCamera(60, 1, 0.1, 1000)
+    newCamera.position.set(0, 0, 25)
+    return newCamera
+  }, [])
 
-    // Camera setup
-    const camera = new THREE.PerspectiveCamera(
-      60,
-      mountRef.current.clientWidth / mountRef.current.clientHeight,
-      0.1,
-      1000,
-    )
-    camera.position.set(0, 0, 25)
-    cameraRef.current = camera
-
-    // Renderer setup
-    const renderer = new THREE.WebGLRenderer({
+  // Memoize renderer creation
+  const renderer = useMemo(() => {
+    const newRenderer = new THREE.WebGLRenderer({
       antialias: true,
       alpha: true,
       powerPreference: "high-performance",
     })
-    renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight)
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-    renderer.shadowMap.enabled = true
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap
-    rendererRef.current = renderer
+    newRenderer.shadowMap.enabled = true
+    newRenderer.shadowMap.type = THREE.PCFSoftShadowMap
+    return newRenderer
+  }, [])
 
-    mountRef.current.appendChild(renderer.domElement)
-
-    // Create floating project cards in 3D space - now in black and white
-    const cardGroup = new THREE.Group()
+  // Memoize floating cards creation
+  const cardGroup = useMemo(() => {
+    const group = new THREE.Group()
     const cards: THREE.Mesh[] = []
 
     for (let i = 0; i < 12; i++) {
       const cardGeometry = new THREE.PlaneGeometry(2, 1.2, 1, 1)
       const cardMaterial = new THREE.MeshPhysicalMaterial({
-        color: 0x1a1a1a, // Dark gray
+        color: 0x1a1a1a,
         metalness: 0.1,
         roughness: 0.8,
         transmission: 0.1,
@@ -76,13 +72,15 @@ const ThreePortfolioBackground = ({ className, activeCategory }: ThreePortfolioB
       card.rotation.y = angle + Math.PI / 2
       card.rotation.x = (Math.random() - 0.5) * 0.3
 
-      cardGroup.add(card)
+      group.add(card)
       cards.push(card)
     }
 
-    scene.add(cardGroup)
+    return { group, cards }
+  }, [])
 
-    // Create code matrix effect - now in black and white
+  // Memoize matrix effect creation
+  const matrixSystem = useMemo(() => {
     const matrixGeometry = new THREE.BufferGeometry()
     const matrixCount = 1000
     const matrixPositions = new Float32Array(matrixCount * 3)
@@ -93,7 +91,7 @@ const ThreePortfolioBackground = ({ className, activeCategory }: ThreePortfolioB
       matrixPositions[i * 3 + 1] = (Math.random() - 0.5) * 50
       matrixPositions[i * 3 + 2] = (Math.random() - 0.5) * 50
 
-      const brightness = 0.3 + Math.random() * 0.7 // Grayscale value between 0.3 and 1.0
+      const brightness = 0.3 + Math.random() * 0.7
       matrixColors[i * 3] = brightness
       matrixColors[i * 3 + 1] = brightness
       matrixColors[i * 3 + 2] = brightness
@@ -110,11 +108,15 @@ const ThreePortfolioBackground = ({ className, activeCategory }: ThreePortfolioB
       blending: THREE.AdditiveBlending,
     })
 
-    const matrix = new THREE.Points(matrixGeometry, matrixMaterial)
-    scene.add(matrix)
+    return {
+      matrix: new THREE.Points(matrixGeometry, matrixMaterial),
+      count: matrixCount,
+    }
+  }, [])
 
-    // Create geometric wireframes - now in black and white
-    const wireframeGroup = new THREE.Group()
+  // Memoize wireframe creation
+  const wireframeGroup = useMemo(() => {
+    const group = new THREE.Group()
     const geometries = [
       new THREE.IcosahedronGeometry(1, 1),
       new THREE.OctahedronGeometry(1.2, 0),
@@ -126,113 +128,137 @@ const ThreePortfolioBackground = ({ className, activeCategory }: ThreePortfolioB
       const line = new THREE.LineSegments(
         wireframe,
         new THREE.LineBasicMaterial({
-          color: [0xffffff, 0xdddddd, 0xaaaaaa][index], // White to gray
+          color: [0xffffff, 0xdddddd, 0xaaaaaa][index],
           transparent: true,
           opacity: 0.3,
         }),
       )
 
       line.position.set((Math.random() - 0.5) * 20, (Math.random() - 0.5) * 20, (Math.random() - 0.5) * 20)
-
-      wireframeGroup.add(line)
+      group.add(line)
     })
 
-    scene.add(wireframeGroup)
+    return group
+  }, [])
 
-    // Lighting - now in black and white
+  // Memoize lighting setup
+  const lights = useMemo(() => {
     const ambientLight = new THREE.AmbientLight(0x404040, 0.4)
-    scene.add(ambientLight)
-
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8) // White light
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8)
     directionalLight.position.set(10, 10, 5)
     directionalLight.castShadow = true
-    scene.add(directionalLight)
 
-    const pointLight1 = new THREE.PointLight(0xffffff, 1, 50) // White light
+    const pointLight1 = new THREE.PointLight(0xffffff, 1, 50)
     pointLight1.position.set(-10, 5, 10)
-    scene.add(pointLight1)
 
-    const pointLight2 = new THREE.PointLight(0xdddddd, 1, 50) // Light gray light
+    const pointLight2 = new THREE.PointLight(0xdddddd, 1, 50)
     pointLight2.position.set(10, -5, -10)
-    scene.add(pointLight2)
 
-    // Mouse interaction
-    const mouse = new THREE.Vector2()
-    const targetCameraPosition = new THREE.Vector3(0, 0, 25)
+    return { ambientLight, directionalLight, pointLight1, pointLight2 }
+  }, [])
 
-    const handleMouseMove = (event: MouseEvent) => {
-      if (!mountRef.current) return
+  // Memoized mouse move handler
+  const handleMouseMove = useCallback((event: MouseEvent) => {
+    if (!mountRef.current) return
 
-      const rect = mountRef.current.getBoundingClientRect()
-      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1
-      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1
+    const rect = mountRef.current.getBoundingClientRect()
+    mouseRef.current.x = ((event.clientX - rect.left) / rect.width) * 2 - 1
+    mouseRef.current.y = -((event.clientY - rect.top) / rect.height) * 2 + 1
 
-      targetCameraPosition.x = mouse.x * 3
-      targetCameraPosition.y = mouse.y * 3
+    targetCameraPositionRef.current.x = mouseRef.current.x * 3
+    targetCameraPositionRef.current.y = mouseRef.current.y * 3
+  }, [])
+
+  // Memoized resize handler
+  const handleResize = useCallback(() => {
+    if (!mountRef.current || !cameraRef.current || !rendererRef.current) return
+
+    cameraRef.current.aspect = mountRef.current.clientWidth / mountRef.current.clientHeight
+    cameraRef.current.updateProjectionMatrix()
+    rendererRef.current.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight)
+  }, [])
+
+  // Memoized animation loop
+  const animate = useCallback(() => {
+    frameRef.current = requestAnimationFrame(animate)
+
+    const time = Date.now() * 0.001
+
+    // Animate floating cards
+    cardGroup.group.rotation.y = time * 0.1
+    cardGroup.cards.forEach((card, index) => {
+      card.rotation.z = Math.sin(time + index) * 0.1
+      card.position.y += Math.sin(time * 2 + index) * 0.01
+    })
+
+    // Animate matrix
+    const positions = matrixSystem.matrix.geometry.attributes.position.array as Float32Array
+    for (let i = 0; i < matrixSystem.count; i++) {
+      positions[i * 3 + 1] -= 0.1
+      if (positions[i * 3 + 1] < -25) {
+        positions[i * 3 + 1] = 25
+      }
+    }
+    matrixSystem.matrix.geometry.attributes.position.needsUpdate = true
+
+    // Animate wireframes
+    wireframeGroup.children.forEach((wireframe, index) => {
+      wireframe.rotation.x += 0.01 * (index + 1)
+      wireframe.rotation.y += 0.01 * (index + 1)
+    })
+
+    // Animate lights
+    lights.pointLight1.position.x = Math.sin(time) * 15
+    lights.pointLight1.position.z = Math.cos(time) * 15
+    lights.pointLight2.position.x = Math.cos(time * 0.7) * 15
+    lights.pointLight2.position.z = Math.sin(time * 0.7) * 15
+
+    // Smooth camera movement
+    if (cameraRef.current) {
+      cameraRef.current.position.lerp(targetCameraPositionRef.current, 0.05)
+      cameraRef.current.lookAt(0, 0, 0)
     }
 
+    if (rendererRef.current && cameraRef.current) {
+      rendererRef.current.render(scene, cameraRef.current)
+    }
+  }, [scene, cardGroup, matrixSystem, wireframeGroup, lights])
+
+  // Initialize Three.js scene
+  const initializeScene = useCallback(() => {
+    if (!mountRef.current) return
+
+    // Store refs
+    sceneRef.current = scene
+    cameraRef.current = camera
+    rendererRef.current = renderer
+
+    // Setup renderer
+    renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight)
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    mountRef.current.appendChild(renderer.domElement)
+
+    // Setup camera aspect ratio
+    camera.aspect = mountRef.current.clientWidth / mountRef.current.clientHeight
+    camera.updateProjectionMatrix()
+
+    // Add objects to scene
+    scene.add(cardGroup.group)
+    scene.add(matrixSystem.matrix)
+    scene.add(wireframeGroup)
+    scene.add(lights.ambientLight)
+    scene.add(lights.directionalLight)
+    scene.add(lights.pointLight1)
+    scene.add(lights.pointLight2)
+
+    // Add event listeners
     window.addEventListener("mousemove", handleMouseMove)
-
-    // Animation loop
-    const animate = () => {
-      frameRef.current = requestAnimationFrame(animate)
-
-      const time = Date.now() * 0.001
-
-      // Animate floating cards
-      cardGroup.rotation.y = time * 0.1
-      cards.forEach((card, index) => {
-        card.rotation.z = Math.sin(time + index) * 0.1
-        card.position.y += Math.sin(time * 2 + index) * 0.01
-      })
-
-      // Animate matrix
-      const positions = matrix.geometry.attributes.position.array as Float32Array
-      for (let i = 0; i < matrixCount; i++) {
-        positions[i * 3 + 1] -= 0.1
-        if (positions[i * 3 + 1] < -25) {
-          positions[i * 3 + 1] = 25
-        }
-      }
-      matrix.geometry.attributes.position.needsUpdate = true
-
-      // Animate wireframes
-      wireframeGroup.children.forEach((wireframe, index) => {
-        wireframe.rotation.x += 0.01 * (index + 1)
-        wireframe.rotation.y += 0.01 * (index + 1)
-      })
-
-      // Animate lights
-      pointLight1.position.x = Math.sin(time) * 15
-      pointLight1.position.z = Math.cos(time) * 15
-      pointLight2.position.x = Math.cos(time * 0.7) * 15
-      pointLight2.position.z = Math.sin(time * 0.7) * 15
-
-      // Smooth camera movement
-      if (camera) {
-        camera.position.lerp(targetCameraPosition, 0.05)
-        camera.lookAt(0, 0, 0)
-      }
-
-      if (renderer && camera) {
-        renderer.render(scene, camera)
-      }
-    }
-
-    animate()
-
-    // Handle resize
-    const handleResize = () => {
-      if (!mountRef.current || !cameraRef.current || !rendererRef.current) return
-
-      cameraRef.current.aspect = mountRef.current.clientWidth / mountRef.current.clientHeight
-      cameraRef.current.updateProjectionMatrix()
-      rendererRef.current.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight)
-    }
-
     window.addEventListener("resize", handleResize)
 
-    // Cleanup
+    // Start animation
+    animate()
+
+    // Cleanup function
     return () => {
       if (frameRef.current) {
         cancelAnimationFrame(frameRef.current)
@@ -240,17 +266,31 @@ const ThreePortfolioBackground = ({ className, activeCategory }: ThreePortfolioB
       window.removeEventListener("mousemove", handleMouseMove)
       window.removeEventListener("resize", handleResize)
 
-      if (mountRef.current && rendererRef.current && rendererRef.current.domElement) {
-        mountRef.current.removeChild(rendererRef.current.domElement)
+      if (mountRef.current && renderer.domElement && mountRef.current.contains(renderer.domElement)) {
+        mountRef.current.removeChild(renderer.domElement)
       }
 
-      if (rendererRef.current) {
-        rendererRef.current.dispose()
-      }
+      renderer.dispose()
     }
-  }, [])
+  }, [scene, camera, renderer, cardGroup, matrixSystem, wireframeGroup, lights, handleMouseMove, handleResize, animate])
 
-  return <div ref={mountRef} className={className} />
+  // Initialize on mount
+  const mountRefCallback = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (node) {
+        mountRef.current = node
+        const cleanup = initializeScene()
+
+        // Store cleanup for unmount
+        return () => {
+          if (cleanup) cleanup()
+        }
+      }
+    },
+    [initializeScene],
+  )
+
+  return <div ref={mountRefCallback} className={className} />
 }
 
 export default ThreePortfolioBackground

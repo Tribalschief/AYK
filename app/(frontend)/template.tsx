@@ -8,10 +8,10 @@ import Header from "@/components/Header/Header";
 
 export default function Template({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const templateRef = useRef<HTMLDivElement>(null);
+  const templateRef = useRef(null);
 
   useEffect(() => {
-    if (templateRef.current) {
+    if (typeof window !== "undefined" && templateRef.current) {
       // Fade in animation
       gsap.fromTo(
         templateRef.current,

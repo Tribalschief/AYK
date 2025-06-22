@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
       }
     ]
   },
+  reactStrictMode: false,
      // Only needed for GitHub Pages or similar
 };
 
